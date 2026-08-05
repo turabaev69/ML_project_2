@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, render_template, request
 import joblib
 import pandas as pd
 
@@ -55,29 +55,58 @@ def sugurta_narxini_bashorat_qil(yosh, bmi, farzandlar_soni, ayolmi,
 def hello():
     return "hello world!"
 
-
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=["GET", "POST"])
 def predict():
-     if request.method == 'GET':
-            return "Use a POST request with JSON data."
+    natija = None
 
-    
-     data = request.get_json() 
-       
+    if request.method == 'POST':
+        yosh = request.form.get('yosh', type=float)
+        bmi = request.form.get('bmi', type=float)
+        farzandlar_soni = request.form.get('children', type=int)
+        ayolmi = request.form.get('gender') == '1'
+        chekadimi = request.form.get('chekadimi') == '1'
+        hudud = request.form.get('hudud')
 
-     natija = sugurta_narxini_bashorat_qil(
-            yosh=data['age'],
-            bmi=data['bmi'],
-            farzandlar_soni=data['children'],
-            ayolmi=data['is_female'],
-            chekadimi=data['is_smoker'],
-            hudud=data['region'],
+        natija = sugurta_narxini_bashorat_qil(
+            yosh=yosh,
+            bmi=bmi,
+            farzandlar_soni=farzandlar_soni,
+            ayolmi=ayolmi,
+            chekadimi=chekadimi,
+            hudud=hudud,
             model=eng_yaxshi_model,
             scaler=scaler,
             ustunlar=ustunlar_tartibi
         )
+        natija = round(float(natija), 2)
 
-     return jsonify({"sugurta_narxi": float(natija)})
+    return render_template('index.html', natija=natija)
+
+
+
+
+# @app.route('/predict', methods=['POST'])
+# def predict():
+#      if request.method == 'GET':
+#             return "Use a POST request with JSON data."
+
+    
+#      data = request.get_json() 
+       
+
+#      natija = sugurta_narxini_bashorat_qil(
+#             yosh=data['age'],
+#             bmi=data['bmi'],
+#             farzandlar_soni=data['children'],
+#             ayolmi=data['is_female'],
+#             chekadimi=data['is_smoker'],
+#             hudud=data['region'],
+#             model=eng_yaxshi_model,
+#             scaler=scaler,
+#             ustunlar=ustunlar_tartibi
+#         )
+
+#      return jsonify({"sugurta_narxi": float(natija)})
 
    
 

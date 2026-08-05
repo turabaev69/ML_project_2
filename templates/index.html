@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sugurta bashorati</title>
+</head>
+<body>
+
+<form method="POST">
+
+<label>Age:</label>
+<input type="number" name="yosh" required>
+
+<label>BMI:</label>
+<input type="number" step="0.1" name="bmi" required>
+
+<label>Children:</label>
+<input type="number" name="children" required>
+
+<label>Gender:</label>
+<select name="gender" required>
+  <option value="0">Male</option>
+  <option value="1">Female</option>
+</select>
+
+<label>Smoker:</label>
+<select name="chekadimi" required>
+  <option value="0">No</option>
+  <option value="1">Yes</option>
+</select>
+
+<label>Region:</label>
+<select name="hudud" required>
+  <option value="northwest">northwest</option>
+  <option value="southeast">southeast</option>
+  <option value="southwest">southwest</option>
+  <option value="northeast">northeast</option>
+</select>
+
+<br><br>
+<button type="submit">Predict</button>
+
+</form>
+
+{% if natija %}
+<h1>Prediction Result</h1>
+<p>{{ natija }}</p>
+{% endif %}
+
+</body>
+</html>
