@@ -4,7 +4,6 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# Model va scalerni yuklash
 eng_yaxshi_model = joblib.load('sugurta_modeli.pkl')
 scaler = joblib.load('scaler.pkl')
 
@@ -50,15 +49,16 @@ def sugurta_narxini_bashorat_qil(yosh, bmi, farzandlar_soni, ayolmi,
 
 @app.route('/', methods=["GET"])
 def home():
-    return render_template('index.html', natija_usd=None)
+    return render_template('index.html', natija_usd=None, natija_uzs=None)
 
 
 @app.route('/predict', methods=["GET", "POST"])
 def predict():
     if request.method == 'GET':
-        return render_template('index.html', natija_usd=None)
+        return render_template('index.html', natija_usd=None, natija_uzs=None)
 
     natija_usd = None
+    natija_uzs = None
     hisoblangan_bmi = None
     bmi_holat = None
     yosh = None
@@ -105,11 +105,17 @@ def predict():
             )
 
             natija_usd = round(float(natija_usd), 2)
+            
+            kurs_usd_uzs = 12600
+            summa_uzs = natija_usd * kurs_usd_uzs
+            natija_uzs = round(summa_uzs, -3)
+
             hisoblangan_bmi = round(hisoblangan_bmi, 1)
 
     return render_template(
         'index.html',
         natija_usd=f"{natija_usd:,.2f}".replace(',', ' ') if natija_usd else None,
+        natija_uzs=f"{natija_uzs:,.0f}".replace(',', ' ') if natija_uzs else None,
         bmi=hisoblangan_bmi,
         bmi_holat=bmi_holat,
         yosh=yosh,
