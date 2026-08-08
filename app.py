@@ -4,7 +4,6 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# Model va scalerni yuklash
 eng_yaxshi_model = joblib.load('sugurta_modeli.pkl')
 scaler = joblib.load('scaler.pkl')
 
