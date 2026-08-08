@@ -1,50 +1,403 @@
 <!DOCTYPE html>
-<html>
+<html lang="uz">
 <head>
-<title>Sugurta bashorati</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQSh Tibbiy Sug'urta Narxini Hisoblash</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --bg: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text-main: #111827;
+            --text-muted: #4B5563;
+            --border: #D1D5DB;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 620px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+            padding: 32px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.4;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s ease;
+            background-color: #FAFAFA;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            background-color: #FFF;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .radio-card {
+            flex: 1;
+            position: relative;
+        }
+
+        .radio-card input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .radio-card label {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #FAFAFA;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .radio-card input:checked + label {
+            background-color: #EEF2FF;
+            border-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .btn-submit {
+            margin-top: 24px;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Hisoblash natijasi stili */
+        .result-box {
+            margin-top: 24px;
+            padding: 20px;
+            background: #ECFDF5;
+            border: 1px solid #A7F3D0;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .result-box h2 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #065F46;
+            margin-bottom: 6px;
+        }
+
+        .result-price-usd {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #047857;
+        }
+
+        .bmi-info {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #A7F3D0;
+            font-size: 0.9rem;
+            color: #065F46;
+        }
+
+        /* Ma'lumot bloki */
+        .permanent-info {
+            margin-top: 28px;
+            padding: 18px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            color: #334155;
+        }
+
+        .permanent-info h3 {
+            font-size: 0.95rem;
+            color: #0F172A;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .permanent-info h3 svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--primary);
+        }
+
+        .permanent-info p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .permanent-info p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* --- MOBIL QURILMALAR UCHUN MOSLASHTIRISH --- */
+        @media (max-width: 640px) {
+            body {
+                padding: 12px;
+                align-items: flex-start;
+            }
+
+            .container {
+                padding: 20px 16px;
+                border-radius: 12px;
+            }
+
+            .header h1 {
+                font-size: 1.35rem;
+            }
+
+            .header p {
+                font-size: 0.85rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .full-width {
+                grid-column: span 1;
+            }
+
+            input, select {
+                padding: 12px 14px;
+                font-size: 1rem; /* iOS zoom oldini olish uchun */
+            }
+
+            .radio-card label {
+                padding: 12px;
+            }
+
+            .btn-submit {
+                padding: 14px;
+                font-size: 1.05rem;
+            }
+
+            .result-price-usd {
+                font-size: 1.8rem;
+            }
+
+            .permanent-info {
+                padding: 14px;
+                font-size: 0.82rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .container {
+                padding: 16px 12px;
+            }
+            .header h1 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<form method="POST">
+<div class="container">
+    <div class="header">
+        <h1>AQSh Tibbiy Sug'urta Kalkulyatori</h1>
+        <p>Sun'iy intellekt modeli yordamida yillik sug'urta qiymatini bashorat qilish tizimi</p>
+    </div>
 
-<label>Age:</label>
-<input type="number" name="yosh" required>
+    <form action="/predict" method="POST">
+        <div class="form-grid">
+            
+            <!-- Yosh -->
+            <div class="form-group">
+                <label for="yosh">Yoshingiz</label>
+                <input type="number" id="yosh" name="yosh" placeholder="Masalan: 30" min="18" max="100" required>
+            </div>
 
-<label>BMI:</label>
-<input type="number" step="0.1" name="bmi" required>
+            <!-- Farzandlar soni -->
+            <div class="form-group">
+                <label for="children">Farzandlar soni</label>
+                <input type="number" id="children" name="children" placeholder="0" min="0" max="10" required>
+            </div>
 
-<label>Children:</label>
-<input type="number" name="children" required>
+            <!-- Bo'y -->
+            <div class="form-group">
+                <label for="height">Bo'yingiz (sm)</label>
+                <input type="number" id="height" name="height" placeholder="Masalan: 175" step="0.1" required>
+            </div>
 
-<label>Gender:</label>
-<select name="gender" required>
-  <option value="0">Male</option>
-  <option value="1">Female</option>
-</select>
+            <!-- Vazn -->
+            <div class="form-group">
+                <label for="weight">Vazningiz (kg)</label>
+                <input type="number" id="weight" name="weight" placeholder="Masalan: 70" step="0.1" required>
+            </div>
 
-<label>Smoker:</label>
-<select name="chekadimi" required>
-  <option value="0">No</option>
-  <option value="1">Yes</option>
-</select>
+            <!-- Jinsi -->
+            <div class="form-group full-width">
+                <label>Jinsingiz</label>
+                <div class="radio-group">
+                    <div class="radio-card">
+                        <input type="radio" id="male" name="gender" value="0" checked>
+                        <label for="male">Erkak</label>
+                    </div>
+                    <div class="radio-card">
+                        <input type="radio" id="female" name="gender" value="1">
+                        <label for="female">Ayol</label>
+                    </div>
+                </div>
+            </div>
 
-<label>Region:</label>
-<select name="hudud" required>
-  <option value="northwest">northwest</option>
-  <option value="southeast">southeast</option>
-  <option value="southwest">southwest</option>
-  <option value="northeast">northeast</option>
-</select>
+            <!-- Chekish -->
+            <div class="form-group full-width">
+                <label>Tamaki chekasizmi?</label>
+                <div class="radio-group">
+                    <div class="radio-card">
+                        <input type="radio" id="smoker_no" name="chekadimi" value="0" checked>
+                        <label for="smoker_no">Yo'q</label>
+                    </div>
+                    <div class="radio-card">
+                        <input type="radio" id="smoker_yes" name="chekadimi" value="1">
+                        <label for="smoker_yes">Ha</label>
+                    </div>
+                </div>
+            </div>
 
-<br><br>
-<button type="submit">Predict</button>
+            <!-- AQSh Hududlari -->
+            <div class="form-group full-width">
+                <label for="hudud">AQShdagi Hudud (US Region)</label>
+                <select id="hudud" name="hudud" required>
+                    <option value="northeast">Northeast (Shimoli-Sharq)</option>
+                    <option value="southeast">Southeast (Janubi-Sharq)</option>
+                    <option value="southwest">Southwest (Janubi-G'arb)</option>
+                    <option value="northwest">Northwest (Shimoli-G'arb)</option>
+                </select>
+            </div>
 
-</form>
+        </div>
 
-{% if natija %}
-<h1>Prediction Result</h1>
-<p>{{ natija }}</p>
-{% endif %}
+        <button type="submit" class="btn-submit">AQSh Sug'urta Narxini Hisoblash</button>
+    </form>
+
+    <!-- Natija bloki -->
+    {% if natija_usd is not none %}
+    <div class="result-box">
+        <h2>Taxminiy Yillik Sug'urta Qiymati</h2>
+        <div class="result-price-usd">${{ natija_usd }}</div>
+
+        {% if bmi %}
+        <div class="bmi-info">
+            • BMI (Tana vazni indeksi): <strong>{{ bmi }} kg/m²</strong><br>
+            • Salomatlik toifasi: <strong>{{ bmi_holat }}</strong>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Ma'lumot bloki -->
+    <div class="permanent-info">
+        <h3>
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+            Model va Narxlar Haqida Ma'lumot
+        </h3>
+        <p>
+            <strong>Machine Learning Modeli:</strong> Ushbu loyiha AQShning rasmiy tibbiy sug'urta ma'lumotlar to'plami (<em>US Medical Insurance Dataset</em>) asosida o'rgatilgan bashorat qilish modeli orqali ishlaydi.
+        </p>
+        <p>
+            <strong>Valyuta haqida:</strong> AQShda tibbiy xizmatlar xususiy bo'lgani sababli yillik sug'urta summasi xorijiy standartlarga mos ravishda AQSh dollarida hisoblanadi.
+        </p>
+        <p>
+            <strong>Geografik hududlar:</strong> Model yashash joyining xavf darajasiga ta'sirini aniqlash uchun AQShning 4 ta asosiy mintaqasini (<em>Northeast, Southeast, Southwest, Northwest</em>) qamrab oladi.
+        </p>
+    </div>
+
+</div>
 
 </body>
 </html>
