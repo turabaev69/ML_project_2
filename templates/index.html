@@ -152,7 +152,6 @@
             background-color: var(--primary-hover);
         }
 
-        /* Hisoblash natijasi stili */
         .result-box {
             margin-top: 24px;
             padding: 20px;
@@ -184,7 +183,6 @@
             color: #065F46;
         }
 
-        /* Ma'lumot bloki */
         .permanent-info {
             margin-top: 28px;
             padding: 18px;
@@ -219,7 +217,6 @@
             margin-bottom: 0;
         }
 
-        /* --- MOBIL QURILMALAR UCHUN MOSLASHTIRISH --- */
         @media (max-width: 640px) {
             body {
                 padding: 12px;
@@ -250,7 +247,7 @@
 
             input, select {
                 padding: 12px 14px;
-                font-size: 1rem; /* iOS zoom oldini olish uchun */
+                font-size: 1rem;
             }
 
             .radio-card label {
@@ -293,68 +290,61 @@
     <form action="/predict" method="POST">
         <div class="form-grid">
             
-            <!-- Yosh -->
             <div class="form-group">
                 <label for="yosh">Yoshingiz</label>
-                <input type="number" id="yosh" name="yosh" placeholder="Masalan: 30" min="18" max="100" required>
+                <input type="number" id="yosh" name="yosh" value="{{ yosh if yosh else '' }}" placeholder="Masalan: 30" min="18" max="100" required>
             </div>
 
-            <!-- Farzandlar soni -->
             <div class="form-group">
                 <label for="children">Farzandlar soni</label>
-                <input type="number" id="children" name="children" placeholder="0" min="0" max="10" required>
+                <input type="number" id="children" name="children" value="{{ farzandlar_soni if farzandlar_soni is not none else '' }}" placeholder="0" min="0" max="10" required>
             </div>
 
-            <!-- Bo'y -->
             <div class="form-group">
                 <label for="height">Bo'yingiz (sm)</label>
-                <input type="number" id="height" name="height" placeholder="Masalan: 175" step="0.1" required>
+                <input type="number" id="height" name="height" value="{{ boy_sm if boy_sm else '' }}" placeholder="Masalan: 175" step="0.1" required>
             </div>
 
-            <!-- Vazn -->
             <div class="form-group">
                 <label for="weight">Vazningiz (kg)</label>
-                <input type="number" id="weight" name="weight" placeholder="Masalan: 70" step="0.1" required>
+                <input type="number" id="weight" name="weight" value="{{ vazn_kg if vazn_kg else '' }}" placeholder="Masalan: 70" step="0.1" required>
             </div>
 
-            <!-- Jinsi -->
             <div class="form-group full-width">
                 <label>Jinsingiz</label>
                 <div class="radio-group">
                     <div class="radio-card">
-                        <input type="radio" id="male" name="gender" value="0" checked>
+                        <input type="radio" id="male" name="gender" value="0" {% if not ayolmi %}checked{% endif %}>
                         <label for="male">Erkak</label>
                     </div>
                     <div class="radio-card">
-                        <input type="radio" id="female" name="gender" value="1">
+                        <input type="radio" id="female" name="gender" value="1" {% if ayolmi %}checked{% endif %}>
                         <label for="female">Ayol</label>
                     </div>
                 </div>
             </div>
 
-            <!-- Chekish -->
             <div class="form-group full-width">
                 <label>Tamaki chekasizmi?</label>
                 <div class="radio-group">
                     <div class="radio-card">
-                        <input type="radio" id="smoker_no" name="chekadimi" value="0" checked>
+                        <input type="radio" id="smoker_no" name="chekadimi" value="0" {% if not chekadimi %}checked{% endif %}>
                         <label for="smoker_no">Yo'q</label>
                     </div>
                     <div class="radio-card">
-                        <input type="radio" id="smoker_yes" name="chekadimi" value="1">
+                        <input type="radio" id="smoker_yes" name="chekadimi" value="1" {% if chekadimi %}checked{% endif %}>
                         <label for="smoker_yes">Ha</label>
                     </div>
                 </div>
             </div>
 
-            <!-- AQSh Hududlari -->
             <div class="form-group full-width">
                 <label for="hudud">AQShdagi Hudud (US Region)</label>
                 <select id="hudud" name="hudud" required>
-                    <option value="northeast">Northeast (Shimoli-Sharq)</option>
-                    <option value="southeast">Southeast (Janubi-Sharq)</option>
-                    <option value="southwest">Southwest (Janubi-G'arb)</option>
-                    <option value="northwest">Northwest (Shimoli-G'arb)</option>
+                    <option value="northeast" {% if hudud == 'northeast' %}selected{% endif %}>Northeast (Shimoli-Sharq)</option>
+                    <option value="southeast" {% if hudud == 'southeast' %}selected{% endif %}>Southeast (Janubi-Sharq)</option>
+                    <option value="southwest" {% if hudud == 'southwest' %}selected{% endif %}>Southwest (Janubi-G'arb)</option>
+                    <option value="northwest" {% if hudud == 'northwest' %}selected{% endif %}>Northwest (Shimoli-G'arb)</option>
                 </select>
             </div>
 
@@ -363,7 +353,6 @@
         <button type="submit" class="btn-submit">AQSh Sug'urta Narxini Hisoblash</button>
     </form>
 
-    <!-- Natija bloki -->
     {% if natija_usd is not none %}
     <div class="result-box">
         <h2>Taxminiy Yillik Sug'urta Qiymati</h2>
@@ -378,7 +367,6 @@
     </div>
     {% endif %}
 
-    <!-- Ma'lumot bloki -->
     <div class="permanent-info">
         <h3>
             <svg viewBox="0 0 24 24">

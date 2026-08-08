@@ -4,6 +4,7 @@ import pandas as pd
 
 app = Flask(__name__)
 
+# Model va scalerni yuklash
 eng_yaxshi_model = joblib.load('sugurta_modeli.pkl')
 scaler = joblib.load('scaler.pkl')
 
@@ -60,6 +61,13 @@ def predict():
     natija_usd = None
     hisoblangan_bmi = None
     bmi_holat = None
+    yosh = None
+    boy_sm = None
+    vazn_kg = None
+    farzandlar_soni = None
+    ayolmi = False
+    chekadimi = False
+    hudud = 'northeast'
 
     if request.method == 'POST':
         yosh = request.form.get('yosh', type=float)
@@ -70,7 +78,6 @@ def predict():
         chekadimi = request.form.get('chekadimi') == '1'
         hudud = request.form.get('hudud')
 
-        # BMI hisoblash
         if boy_sm and vazn_kg and boy_sm > 0:
             boy_m = boy_sm / 100.0
             hisoblangan_bmi = vazn_kg / (boy_m ** 2)
@@ -104,7 +111,14 @@ def predict():
         'index.html',
         natija_usd=f"{natija_usd:,.2f}".replace(',', ' ') if natija_usd else None,
         bmi=hisoblangan_bmi,
-        bmi_holat=bmi_holat
+        bmi_holat=bmi_holat,
+        yosh=yosh,
+        boy_sm=boy_sm,
+        vazn_kg=vazn_kg,
+        farzandlar_soni=farzandlar_soni,
+        ayolmi=ayolmi,
+        chekadimi=chekadimi,
+        hudud=hudud
     )
 
 
