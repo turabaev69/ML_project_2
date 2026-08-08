@@ -353,13 +353,18 @@
         <button type="submit" class="btn-submit">AQSh Sug'urta Narxini Hisoblash</button>
     </form>
 
-    {% if natija_usd is not none %}
+   {% if natija_usd is not none %}
     <div class="result-box">
         <h2>Taxminiy Yillik Sug'urta Qiymati</h2>
         <div class="result-price-usd">${{ natija_usd }}</div>
         <div style="font-size: 1.1rem; color: #047857; margin-top: 4px; font-weight: 600;">
-            ≈ {{ natija_uzs }} so'm <span style="font-size: 0.8rem; font-weight: normal; color: #065F46;">(1$ = 12,600 so'm kursi bo'yicha)</span>
+            ≈ {{ natija_uzs }} so'm <span style="font-size: 0.8rem; font-weight: normal; color: #065F46;">(1$ = 12,600 so'm)</span>
         </div>
+        {% if natija_uzs_soz %}
+        <div style="font-size: 0.85rem; color: #065F46; margin-top: 4px; font-style: italic;">
+            ({{ natija_uzs_soz }} so'm)
+        </div>
+        {% endif %}
 
         {% if bmi %}
         <div class="bmi-info">
